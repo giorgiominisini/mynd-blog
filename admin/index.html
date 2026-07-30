@@ -28,6 +28,22 @@
   .status.ok { color: var(--teal); }
   .status.err { color: #C97B5C; }
   #gate { max-width: 360px; margin: 96px auto; padding: 0 24px; text-align: center; }
+  .row {
+    display: flex; align-items: center; gap: 12px; padding: 14px 0;
+    border-top: 1px solid var(--line);
+  }
+  .row:first-child { border-top: 1px solid var(--line); }
+  .row .info { flex: 1; min-width: 0; }
+  .row .info .row-title { font-family: 'Fraunces', serif; font-size: 1.05rem; }
+  .row .info .row-date { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--ink-dim); }
+  .row .actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .row .actions button {
+    background: var(--night-2); border: 1px solid var(--line); color: var(--ink);
+    padding: 6px 10px; cursor: pointer; border-radius: 2px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+  }
+  .row .actions button:hover { border-color: var(--gold); color: var(--gold); }
+  .row .actions button.danger:hover { border-color: #C97B5C; color: #C97B5C; }
 </style>
 </head>
 <body>
@@ -39,13 +55,22 @@
 <div id="gate">
   <p class="eyebrow">area riservata</p>
   <div class="field" style="margin-top:20px;">
-    <input type="password" id="password" placeholder="Password">
+    <input type="password" id="password" placeholder="Password"
+           autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
   </div>
+  <label style="display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--ink-dim); margin-bottom:16px;">
+    <input type="checkbox" id="show-pw"> mostra password
+  </label>
   <button class="btn primary" id="unlock" style="width:100%; justify-content:center;">Entra</button>
 </div>
 
 <div class="panel" id="panel" style="display:none;">
-  <p class="eyebrow">nuovo articolo</p>
+  <p class="eyebrow">articoli pubblicati</p>
+  <div id="manager" style="margin: 16px 0 48px;">
+    <p class="empty">Caricamento…</p>
+  </div>
+
+  <p class="eyebrow" id="form-title">nuovo articolo</p>
 
   <div class="field">
     <label>Titolo</label>
@@ -80,6 +105,7 @@
   </div>
 
   <button class="btn primary" id="publish">Pubblica articolo</button>
+  <button class="btn" id="cancel-edit" style="display:none;">Annulla modifica / nuovo articolo</button>
   <div class="status" id="status"></div>
 </div>
 
