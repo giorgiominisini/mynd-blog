@@ -1,0 +1,284 @@
+/* ==========================================================================
+   MYND — design tokens
+   Sport as the lens, the mind as the subject.
+   Palette: dusk-track navy, chalk white, worn-gold (effort/achievement),
+   still-teal (focus/calm). Nothing near-black-and-neon, nothing cream-serif.
+   Display: Fraunces (soft, editorial, a little human — not a "sporty" font,
+   because the site is about the mind, not the scoreboard).
+   Body: Inter. Meta/labels: IBM Plex Mono, run like stopwatch digits.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink:        #EDEAE1;
+  --ink-dim:    #A9A79E;
+  --night:      #14161F;
+  --night-2:    #1B1E29;
+  --line:       #2B2F3D;
+  --gold:       #C9A24B;
+  --teal:       #5C9088;
+  --radius:     2px;
+  --measure:    64ch;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .display {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.eyebrow, .meta, time, .mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+a { color: var(--ink); }
+a.quiet { color: inherit; text-decoration: none; }
+a.quiet:hover { color: var(--gold); }
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---- header ---- */
+header.site {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.wordmark {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+}
+.wordmark span { color: var(--gold); font-style: normal; }
+
+nav.site a {
+  text-decoration: none;
+  margin-left: 28px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+nav.site a:hover { color: var(--ink); }
+
+/* ---- hero: the signature element ---- */
+.hero {
+  position: relative;
+  padding: 96px 24px 72px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero .wrap { position: relative; z-index: 2; }
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  max-width: 14ch;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero p.lede {
+  max-width: var(--measure);
+  color: var(--ink-dim);
+  font-size: 1.15rem;
+  margin-top: 22px;
+}
+
+/* the trace: a single hand-drawn line from a spike in effort (sport)
+   settling into a calm, steady wave (mind). drawn once on load. */
+.trace {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.55;
+}
+.trace path {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: draw 2.6s cubic-bezier(.4,0,.2,1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .trace path { animation: none; stroke-dashoffset: 0; }
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* ---- article list ---- */
+.list {
+  padding: 56px 24px 96px;
+}
+.list h2.section-title {
+  font-size: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  margin-bottom: 32px;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 28px;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+}
+.card:first-of-type { border-top: 1px solid var(--line); }
+.card img {
+  width: 220px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--night-2);
+}
+.card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.card p.excerpt {
+  color: var(--ink-dim);
+  margin: 0 0 10px;
+}
+.card:hover h3 { color: var(--gold); }
+
+@media (max-width: 640px) {
+  .card { grid-template-columns: 1fr; }
+  .card img { width: 100%; height: 180px; }
+}
+
+/* ---- article page ---- */
+.article-head {
+  padding: 72px 24px 40px;
+  border-bottom: 1px solid var(--line);
+}
+.article-head h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  max-width: 20ch;
+  margin: 18px 0 20px;
+}
+.article-head .cover {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-top: 32px;
+}
+.article-body {
+  padding: 48px 24px 40px;
+  max-width: var(--measure);
+  margin: 0 auto;
+  font-size: 1.12rem;
+}
+.article-body p { margin: 0 0 1.3em; }
+.article-body h2 { font-size: 1.5rem; margin: 1.6em 0 0.6em; }
+
+.share-bar {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 24px 96px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+button.btn, a.btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+button.btn:hover, a.btn:hover { border-color: var(--gold); color: var(--gold); }
+button.btn:focus-visible, a.btn:focus-visible, a:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+button.btn.primary {
+  background: var(--gold);
+  color: var(--night);
+  border-color: var(--gold);
+}
+button.btn.primary:hover { color: var(--night); opacity: 0.9; }
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--night-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+footer.site {
+  padding: 40px 24px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+}
+
+/* ---- empty state ---- */
+.empty {
+  padding: 40px 0;
+  color: var(--ink-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+}

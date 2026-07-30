@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Mynd</title>
+<meta name="description" id="page-desc" content="">
+<!-- Open Graph: cos'è che Instagram/altri social leggono quando incolli il link -->
+<meta property="og:title" id="og-title" content="">
+<meta property="og:description" id="og-desc" content="">
+<meta property="og:image" id="og-image" content="">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <a href="index.html" class="wordmark quiet">my<span>n</span>d</a>
+  <nav class="site">
+    <a href="admin/index.html">Admin</a>
+  </nav>
+</header>
+
+<article>
+  <div class="article-head wrap" id="head">
+    <p class="eyebrow" id="date"></p>
+    <h1 id="title">Caricamento…</h1>
+    <img class="cover" id="cover" alt="" style="display:none">
+  </div>
+  <div class="article-body" id="body"></div>
+
+  <div class="share-bar">
+    <button class="btn primary" id="btn-story">Genera storia Instagram</button>
+    <button class="btn" id="btn-link">Copia link</button>
+  </div>
+</article>
+
+<footer class="site">
+  <div class="wrap">mynd — nota: condividi con cura.</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/story-generator.js"></script>
+<script src="js/article.js"></script>
+</body>
+</html>

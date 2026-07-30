@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mynd — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .panel { max-width: 720px; margin: 0 auto; padding: 56px 24px 96px; }
+  .field { margin-bottom: 22px; }
+  label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+          text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-dim); margin-bottom: 8px; }
+  input[type=text], input[type=password], input[type=date] {
+    width: 100%; background: var(--night-2); border: 1px solid var(--line); color: var(--ink);
+    padding: 12px 14px; border-radius: 2px; font-family: 'Inter', sans-serif; font-size: 1rem;
+  }
+  #editor {
+    min-height: 260px; background: var(--night-2); border: 1px solid var(--line); color: var(--ink);
+    padding: 16px; border-radius: 2px; font-size: 1.05rem; line-height: 1.6;
+  }
+  #editor:focus { outline: 2px solid var(--teal); }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 8px; }
+  .toolbar button { background: var(--night-2); border: 1px solid var(--line); color: var(--ink);
+                    padding: 6px 12px; cursor: pointer; border-radius: 2px; font-family: 'Fraunces', serif; }
+  .toolbar button:hover { border-color: var(--gold); }
+  .status { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; margin-top: 16px; }
+  .status.ok { color: var(--teal); }
+  .status.err { color: #C97B5C; }
+  #gate { max-width: 360px; margin: 96px auto; padding: 0 24px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a href="../index.html" class="wordmark quiet">my<span>n</span>d</a>
+</header>
+
+<div id="gate">
+  <p class="eyebrow">area riservata</p>
+  <div class="field" style="margin-top:20px;">
+    <input type="password" id="password" placeholder="Password">
+  </div>
+  <button class="btn primary" id="unlock" style="width:100%; justify-content:center;">Entra</button>
+</div>
+
+<div class="panel" id="panel" style="display:none;">
+  <p class="eyebrow">nuovo articolo</p>
+
+  <div class="field">
+    <label>Titolo</label>
+    <input type="text" id="title" placeholder="Il titolo dell'articolo">
+  </div>
+
+  <div class="field">
+    <label>Sottotitolo / estratto (appare nell'elenco)</label>
+    <input type="text" id="excerpt" placeholder="Una riga che riassume l'articolo">
+  </div>
+
+  <div class="field">
+    <label>Data</label>
+    <input type="date" id="date">
+  </div>
+
+  <div class="field">
+    <label>Foto di copertina</label>
+    <input type="file" id="cover" accept="image/*">
+    <img id="preview" style="max-width:100%; margin-top:12px; border-radius:2px; display:none;">
+  </div>
+
+  <div class="field">
+    <label>Testo dell'articolo</label>
+    <div class="toolbar">
+      <button type="button" data-cmd="bold"><b>B</b></button>
+      <button type="button" data-cmd="italic"><i>I</i></button>
+      <button type="button" data-cmd="formatBlock" data-value="h2">H2</button>
+      <button type="button" data-cmd="formatBlock" data-value="p">P</button>
+    </div>
+    <div id="editor" contenteditable="true"></div>
+  </div>
+
+  <button class="btn primary" id="publish">Pubblica articolo</button>
+  <div class="status" id="status"></div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

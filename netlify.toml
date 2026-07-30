@@ -1,0 +1,22 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[functions]
+  node_bundler = "esbuild"
+
+# Intestazioni di sicurezza di base — riducono superfici di attacco comuni
+# (clickjacking, sniffing MIME, injection). Netlify le applica alla sua CDN,
+# che è già la prima linea di difesa da traffico anomalo/DDoS.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
