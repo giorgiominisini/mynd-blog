@@ -53,7 +53,7 @@ async function generateInstagramStory(article, articleUrl) {
 
   ctx.fillStyle = '#A9A79E';
   ctx.font = '400 28px "IBM Plex Mono", monospace';
-  ctx.fillText('link nella didascalia — già copiato', margin, H - 64);
+  ctx.fillText('- oltre il risultato', margin, H - 64);
 
   // scarica l'immagine
   canvas.toBlob(async (blob) => {

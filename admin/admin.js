@@ -6,6 +6,43 @@ document.getElementById('show-pw').addEventListener('change', (e) => {
   document.getElementById('password').type = e.target.checked ? 'text' : 'password';
 });
 
+// ---- ritaglio immagini (copertina 16:9, foto centrale 4:3) ----
+
+const coverCropper = createCropper({
+  frame: document.getElementById('cover-frame'),
+  img: document.getElementById('cover-img'),
+  zoomSlider: document.getElementById('cover-zoom'),
+  aspectRatio: 16 / 9
+});
+const midCropper = createCropper({
+  frame: document.getElementById('mid-frame'),
+  img: document.getElementById('mid-img'),
+  zoomSlider: document.getElementById('mid-zoom'),
+  aspectRatio: 4 / 3
+});
+
+document.getElementById('cover-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  await coverCropper.setImageFromFile(file);
+  document.getElementById('cover-zoom-row').style.display = 'flex';
+  document.getElementById('cover-hint').style.display = 'block';
+});
+
+document.getElementById('mid-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  await midCropper.setImageFromFile(file);
+  document.getElementById('mid-zoom-row').style.display = 'flex';
+  document.getElementById('mid-hint').style.display = 'block';
+});
+
+function hideCropperUi(prefix) {
+  document.getElementById(prefix + '-zoom-row').style.display = 'none';
+  document.getElementById(prefix + '-hint').style.display = 'none';
+  document.getElementById(prefix + '-file').value = '';
+}
+
 document.getElementById('unlock').addEventListener('click', () => {
   adminPassword = document.getElementById('password').value;
   if (!adminPassword) return;
@@ -22,22 +59,7 @@ document.querySelectorAll('.toolbar button').forEach(btn => {
   });
 });
 
-let coverBase64 = '';
-let coverExt = 'jpg';
-
-document.getElementById('cover').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  coverExt = (file.name.split('.').pop() || 'jpg').toLowerCase();
-  const reader = new FileReader();
-  reader.onload = () => {
-    coverBase64 = reader.result.split(',')[1];
-    const preview = document.getElementById('preview');
-    preview.src = reader.result;
-    preview.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-});
+// ---- lista di gestione (modifica / elimina / riordina) ----
 
 async function loadManagerList() {
   const managerEl = document.getElementById('manager');
@@ -106,7 +128,7 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function startEdit(slug, articles) {
+async function startEdit(slug, articles) {
   const article = articles.find(a => a.slug === slug);
   if (!article) return;
   editingSlug = slug;
@@ -116,13 +138,22 @@ function startEdit(slug, articles) {
   document.getElementById('excerpt').value = article.excerpt || '';
   document.getElementById('date').value = (article.date || '').slice(0, 10);
   document.getElementById('editor').innerHTML = article.body || '';
-  coverBase64 = '';
-  const preview = document.getElementById('preview');
+
+  // ricarica le immagini esistenti nel ritaglio, cosi si possono ri-inquadrare
+  coverCropper.reset();
+  hideCropperUi('cover');
   if (article.cover) {
-    preview.src = article.cover;
-    preview.style.display = 'block';
-  } else {
-    preview.style.display = 'none';
+    await coverCropper.setImageFromUrl('../' + article.cover.replace(/^\//, ''));
+    document.getElementById('cover-zoom-row').style.display = 'flex';
+    document.getElementById('cover-hint').style.display = 'block';
+  }
+
+  midCropper.reset();
+  hideCropperUi('mid');
+  if (article.mid) {
+    await midCropper.setImageFromUrl('../' + article.mid.replace(/^\//, ''));
+    document.getElementById('mid-zoom-row').style.display = 'flex';
+    document.getElementById('mid-hint').style.display = 'block';
   }
 
   document.getElementById('publish').textContent = 'Salva modifiche';
@@ -139,8 +170,10 @@ function resetForm() {
   document.getElementById('excerpt').value = '';
   document.getElementById('date').valueAsDate = new Date();
   document.getElementById('editor').innerHTML = '';
-  document.getElementById('preview').style.display = 'none';
-  coverBase64 = '';
+  coverCropper.reset();
+  hideCropperUi('cover');
+  midCropper.reset();
+  hideCropperUi('mid');
   document.getElementById('publish').textContent = 'Pubblica articolo';
   document.getElementById('cancel-edit').style.display = 'none';
 }
@@ -184,6 +217,8 @@ async function moveArticle(slug, direction) {
   }
 }
 
+// ---- pubblica / salva ----
+
 document.getElementById('publish').addEventListener('click', async () => {
   const title = document.getElementById('title').value.trim();
   const excerpt = document.getElementById('excerpt').value.trim();
@@ -206,10 +241,18 @@ document.getElementById('publish').addEventListener('click', async () => {
       action: isEditing ? 'update' : 'create',
       title: title, excerpt: excerpt,
       date: date ? new Date(date).toISOString() : new Date().toISOString(),
-      body: body,
-      cover: coverBase64 || null,
-      coverExt: coverExt
+      body: body
     };
+    // le immagini vengono ritagliate ed esportate solo se e' stata caricata
+    // una nuova foto in questa sessione; altrimenti quella esistente resta invariata
+    if (coverCropper.hasImage()) {
+      payload.cover = coverCropper.getCroppedBase64(1600);
+      payload.coverExt = 'jpg';
+    }
+    if (midCropper.hasImage()) {
+      payload.mid = midCropper.getCroppedBase64(1200);
+      payload.midExt = 'jpg';
+    }
     if (isEditing) payload.slug = editingSlug;
 
     const res = await callArticlesApi(payload);

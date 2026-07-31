@@ -42,9 +42,32 @@ async function loadArticle() {
       cover.style.display = 'block';
     }
 
+    if (a.mid) insertMidImage(a.mid);
+
     setShareLinks(a, window.location.href);
   } catch (err) {
     document.getElementById('title').textContent = 'Articolo non trovato';
+  }
+}
+
+// Inserisce la foto centrale subito dopo il paragrafo di metà articolo.
+// Se il testo non ha paragrafi diretti (solo titoli, o struttura insolita),
+// la mette in fondo al corpo dell'articolo invece di non mostrarla.
+function insertMidImage(midSrc) {
+  const bodyEl = document.getElementById('body');
+  const paragraphs = Array.from(bodyEl.children).filter(el => el.tagName === 'P');
+
+  const img = document.createElement('img');
+  img.src = midSrc;
+  img.alt = '';
+  img.loading = 'lazy';
+  img.className = 'mid-image';
+
+  if (paragraphs.length > 0) {
+    const middleIndex = Math.floor((paragraphs.length - 1) / 2);
+    paragraphs[middleIndex].after(img);
+  } else {
+    bodyEl.appendChild(img);
   }
 }
 

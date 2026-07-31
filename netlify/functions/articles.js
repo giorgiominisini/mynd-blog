@@ -45,20 +45,28 @@ exports.handler = async (event) => {
   }
 };
 
-async function createArticle(repo, branch, { title, excerpt, date, body, cover, coverExt }) {
+async function createArticle(repo, branch, { title, excerpt, date, body, cover, coverExt, mid, midExt }) {
   if (!title || !body) throw new Error('Titolo e testo sono obbligatori');
 
   const slug = slugify(title) + '-' + Date.now().toString(36);
+
   let coverPath = '';
   if (cover) {
-    coverPath = `content/images/${slug}.${coverExt || 'jpg'}`;
-    await putFile(repo, coverPath, cover, branch, `Aggiungi immagine per "${title}"`);
+    coverPath = `content/images/${slug}-cover.${coverExt || 'jpg'}`;
+    await putFile(repo, coverPath, cover, branch, `Aggiungi copertina per "${title}"`);
+  }
+
+  let midPath = '';
+  if (mid) {
+    midPath = `content/images/${slug}-mid.${midExt || 'jpg'}`;
+    await putFile(repo, midPath, mid, branch, `Aggiungi foto centrale per "${title}"`);
   }
 
   const article = {
     slug, title, excerpt: excerpt || '',
     date: date || new Date().toISOString(),
     cover: coverPath ? `/${coverPath}` : '',
+    mid: midPath ? `/${midPath}` : '',
     body
   };
   await putFile(
@@ -78,7 +86,7 @@ async function createArticle(repo, branch, { title, excerpt, date, body, cover, 
   return { ok: true, slug };
 }
 
-async function updateArticle(repo, branch, { slug, title, excerpt, date, body, cover, coverExt }) {
+async function updateArticle(repo, branch, { slug, title, excerpt, date, body, cover, coverExt, mid, midExt }) {
   if (!slug) throw new Error('Slug mancante');
   const path = `content/articles/${slug}.json`;
   const { data: existing, sha } = await readJson(repo, path, branch, null);
@@ -86,8 +94,14 @@ async function updateArticle(repo, branch, { slug, title, excerpt, date, body, c
 
   let coverPath = existing.cover ? existing.cover.replace(/^\//, '') : '';
   if (cover) {
-    coverPath = `content/images/${slug}.${coverExt || 'jpg'}`;
-    await putFile(repo, coverPath, cover, branch, `Aggiorna immagine per "${title}"`);
+    coverPath = `content/images/${slug}-cover.${coverExt || 'jpg'}`;
+    await putFile(repo, coverPath, cover, branch, `Aggiorna copertina per "${title}"`);
+  }
+
+  let midPath = existing.mid ? existing.mid.replace(/^\//, '') : '';
+  if (mid) {
+    midPath = `content/images/${slug}-mid.${midExt || 'jpg'}`;
+    await putFile(repo, midPath, mid, branch, `Aggiorna foto centrale per "${title}"`);
   }
 
   const updated = {
@@ -96,6 +110,7 @@ async function updateArticle(repo, branch, { slug, title, excerpt, date, body, c
     excerpt: excerpt ?? existing.excerpt,
     date: date || existing.date,
     cover: coverPath ? `/${coverPath}` : existing.cover,
+    mid: midPath ? `/${midPath}` : (existing.mid || ''),
     body: body || existing.body
   };
   await putFile(
@@ -113,7 +128,10 @@ async function deleteArticle(repo, branch, { slug }) {
 
   const { data: existing } = await readJson(repo, articlePath, branch, null);
   if (existing && existing.cover) {
-    await deleteFile(repo, existing.cover.replace(/^\//, ''), branch, `Elimina immagine di "${slug}"`);
+    await deleteFile(repo, existing.cover.replace(/^\//, ''), branch, `Elimina copertina di "${slug}"`);
+  }
+  if (existing && existing.mid) {
+    await deleteFile(repo, existing.mid.replace(/^\//, ''), branch, `Elimina foto centrale di "${slug}"`);
   }
   await deleteFile(repo, articlePath, branch, `Elimina articolo "${slug}"`);
 

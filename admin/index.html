@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mynd - Admin</title>
+<title>mynd - Admin</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="../css/style.css">
 <style>
@@ -44,6 +44,23 @@
   }
   .row .actions button:hover { border-color: var(--gold); color: var(--gold); }
   .row .actions button.danger:hover { border-color: #C97B5C; color: #C97B5C; }
+
+  /* ritaglio immagini: cornice con proporzioni fisse = come appariranno nel blog */
+  .crop-frame {
+    position: relative; width: 100%; overflow: hidden; border-radius: 2px;
+    background: var(--night-2); border: 1px solid var(--line); margin-top: 12px;
+    cursor: grab; touch-action: none;
+  }
+  .crop-frame:active { cursor: grabbing; }
+  .crop-frame img {
+    position: absolute; top: 50%; left: 50%; max-width: none; max-height: none;
+    user-select: none; -webkit-user-drag: none; pointer-events: none;
+  }
+  .zoom-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .zoom-row input[type=range] { flex: 1; }
+  .crop-hint {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--ink-dim); margin-top: 8px;
+  }
 </style>
 </head>
 <body>
@@ -89,8 +106,30 @@
 
   <div class="field">
     <label>Foto di copertina</label>
-    <input type="file" id="cover" accept="image/*">
-    <img id="preview" style="max-width:100%; margin-top:12px; border-radius:2px; display:none;">
+    <input type="file" id="cover-file" accept="image/*">
+    <div class="crop-frame" id="cover-frame" style="aspect-ratio: 16/9; display:none;">
+      <img id="cover-img" alt="">
+    </div>
+    <div class="zoom-row" id="cover-zoom-row" style="display:none;">
+      <input type="range" id="cover-zoom">
+    </div>
+    <p class="crop-hint" id="cover-hint" style="display:none;">
+      Trascina per spostare, usa lo slider per ingrandire — questa cornice è esattamente come apparirà nel blog.
+    </p>
+  </div>
+
+  <div class="field">
+    <label>Foto centrale articolo (facoltativa — verrà inserita a metà testo)</label>
+    <input type="file" id="mid-file" accept="image/*">
+    <div class="crop-frame" id="mid-frame" style="aspect-ratio: 4/3; display:none;">
+      <img id="mid-img" alt="">
+    </div>
+    <div class="zoom-row" id="mid-zoom-row" style="display:none;">
+      <input type="range" id="mid-zoom">
+    </div>
+    <p class="crop-hint" id="mid-hint" style="display:none;">
+      Trascina per spostare, usa lo slider per ingrandire.
+    </p>
   </div>
 
   <div class="field">
@@ -109,6 +148,7 @@
   <div class="status" id="status"></div>
 </div>
 
+<script src="cropper.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

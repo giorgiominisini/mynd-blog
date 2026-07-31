@@ -1,3 +1,13 @@
+/* ==========================================================================
+   MYND — design tokens
+   Sport as the lens, the mind as the subject.
+   Palette: dusk-track navy, chalk white, worn-gold (effort/achievement),
+   still-teal (focus/calm). Nothing near-black-and-neon, nothing cream-serif.
+   Display: Fraunces (soft, editorial, a little human — not a "sporty" font,
+   because the site is about the mind, not the scoreboard).
+   Body: Inter. Meta/labels: IBM Plex Mono, run like stopwatch digits.
+   ========================================================================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
@@ -122,6 +132,7 @@ nav.site a:hover { color: var(--ink); }
   fill: none;
   stroke: var(--teal);
   stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-dasharray: 1400;
   stroke-dashoffset: 1400;
@@ -202,14 +213,27 @@ nav.site a:hover { color: var(--ink); }
 }
 .article-body p { margin: 0 0 1.3em; }
 .article-body h2 { font-size: 1.5rem; margin: 1.6em 0 0.6em; }
+.article-body img.mid-image {
+  width: 100%;
+  border-radius: var(--radius);
+  margin: 12px 0 32px;
+}
 
 .share-bar {
   max-width: var(--measure);
   margin: 0 auto;
   padding: 0 24px 96px;
   display: flex;
+  align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+.share-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
 }
 button.btn, a.btn {
   font-family: 'IBM Plex Mono', monospace;
