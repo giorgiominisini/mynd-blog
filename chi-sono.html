@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi sono - mynd</title>
+<meta name="description" content="Giorgio Minisini - chi sono, cosa ho fatto nello sport, cosa faccio ora, e gli obiettivi di mynd.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .bio-wrap { max-width: var(--measure); margin: 0 auto; padding: 72px 24px 96px; }
+  .bio-wrap h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 8px; }
+  .bio-wrap .role { color: var(--gold); margin-bottom: 48px; }
+  .bio-wrap section { margin-bottom: 44px; }
+  .bio-wrap h2 {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink-dim); margin-bottom: 14px;
+  }
+  .bio-wrap p { margin: 0 0 1.2em; font-size: 1.08rem; }
+  .placeholder { color: var(--ink-dim); font-style: italic; }
+  .bio-photo {
+    width: 220px; height: 220px; object-fit: cover; border-radius: var(--radius);
+    margin-bottom: 32px; background: var(--night-2);
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a href="index.html" class="wordmark quiet">my<span>n</span>d</a>
+  <nav class="site">
+    <a href="chi-sono.html">Autore</a>
+    <a href="admin/index.html">Admin</a>
+  </nav>
+</header>
+
+<div class="bio-wrap">
+
+  <img class="bio-photo" src="content/images/image.jpg" alt="Giorgio Minisini">
+
+  <h1>Giorgio Minisini</h1>
+  <p class="role">mynd</p>
+
+  <section>
+    <p class="placeholder">In un'altra vita sono stato il primo nuotatore artistico italiano, vincendo in 22 anni 4 ori Mondiali e 5 Europei. In questo percorso ho vissuto di tutto: dalle celebrazioni mediatiche agli insulti; dalla minaccia dello stereotipo alla rivincita personale.</p>
+  </section>
+
+  <section>
+    <p class="placeholder">Dottore in Scienze e Tecniche Psicologiche alla Sapienza di Roma, cerco più che altro di tenermi impegnato. Faccio parte del Gruppo Sportivo delle Fiamme Oro; lavoro col Progetto Filippide; collaboro con World Aquatics. In ogni ambito, il mio obiettivo è creare, per chi c'è adesso, un'esperienza sportiva migliore di quella che ho avuto io.</p>
+  </section>
+
+  <section>
+    <p class="placeholder"><i>mynd</i> è un pezzetto di questo progetto. Raccontando lo sport, cerco di proporne un'idea diversa: uno sport che sia più equilibrato; più sano; e, proprio per questo, più competivito. In poche parole: uno sport al servizio della persona.</p>
+  </section>
+</div>
+
+<footer class="site">
+  <div class="wrap">mynd - © <span id="year"></span></div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

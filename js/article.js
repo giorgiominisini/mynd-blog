@@ -41,9 +41,23 @@ async function loadArticle() {
       cover.src = a.cover;
       cover.style.display = 'block';
     }
+
+    setShareLinks(a, window.location.href);
   } catch (err) {
     document.getElementById('title').textContent = 'Articolo non trovato';
   }
+}
+
+function setShareLinks(article, url) {
+  const encodedUrl = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(article.title);
+
+  document.getElementById('btn-x').href =
+    `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+  document.getElementById('btn-facebook').href =
+    `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+  document.getElementById('btn-linkedin').href =
+    `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
 }
 
 document.getElementById('btn-link').addEventListener('click', async () => {
